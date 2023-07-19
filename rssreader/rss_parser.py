@@ -22,7 +22,13 @@ def parse_rss_feed(request):
                 feed_entries = feedparser.parse(url)
                 for entry in feed_entries.entries:
                     try:
-                        title = entry.title
+                        # Remove the suffix ' - Upwork' from the title
+                        suffix = ' - Upwork'
+                        if entry.title.endswith(suffix):
+                            title = entry.title[:-len(suffix)]
+                        else:
+                            title = entry.title
+
                         link = entry.get('link', '')  # Provide a default value if link is not present
                         published_date_str = entry.get('published', '')
                         published_date = parse_datetime(published_date_str) if published_date_str else None
@@ -77,3 +83,5 @@ def parse_rss_feed(request):
         data = {'message': message}
         traceback.print_exc()  # Print the traceback for detailed error information
         return JsonResponse(data)
+
+
