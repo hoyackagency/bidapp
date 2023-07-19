@@ -1,4 +1,19 @@
 import re
+from bs4 import BeautifulSoup
+from html import unescape
+
+def clean_text(text):
+    # Remove HTML tags
+    soup = BeautifulSoup(text, 'html.parser')
+    cleaned_text = soup.get_text(separator=' ')
+
+    # Convert HTML entities to their corresponding characters
+    cleaned_text = unescape(cleaned_text)
+
+    # Remove leading/trailing white spaces
+    cleaned_text = cleaned_text.strip()
+
+    return cleaned_text
 
 def parse_content(content):
     # Extract the description
@@ -35,5 +50,17 @@ def parse_content(content):
     country_pattern = r'Country</b>: (.*?)\n'
     country_match = re.search(country_pattern, content)
     country = country_match.group(1) if country_match else None
+
+    # Clean the extracted values
+    if description:
+        description = clean_text(description)
+    if pay_range:
+        pay_range = clean_text(pay_range)
+    if category:
+        category = clean_text(category)
+    if skills:
+        skills = clean_text(skills)
+    if country:
+        country = clean_text(country)
 
     return description, pay_range, job_type, category, skills, country
