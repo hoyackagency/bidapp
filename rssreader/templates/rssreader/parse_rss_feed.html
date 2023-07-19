@@ -1,0 +1,8 @@
+<h1>RSS Feed Parsing Result</h1>
+
+{% if success %}
+    <p>Feed successfully parsed and saved to the database.</p>
+{% else %}
+    <p>There was an error parsing the feed:</p>
+    <p>{{ error }}</p>
+{% endif %}
