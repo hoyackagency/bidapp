@@ -7,6 +7,21 @@ import pytz
 from .utils import parse_content
 from django.http import JsonResponse
 import re
+from bs4 import BeautifulSoup
+from html import unescape
+
+def clean_text(text):
+    # Remove HTML tags
+    soup = BeautifulSoup(text, 'html.parser')
+    cleaned_text = soup.get_text(separator=' ')
+
+    # Convert HTML entities to their corresponding characters
+    cleaned_text = unescape(cleaned_text)
+
+    # Remove leading/trailing white spaces
+    cleaned_text = cleaned_text.strip()
+
+    return cleaned_text
 
 def parse_rss_feed(request):
     try:
@@ -38,7 +53,8 @@ def parse_rss_feed(request):
                             published_date = datetime.strptime(published_date_str, '%a, %d %b %Y %H:%M:%S %z').astimezone(pytz.UTC)
 
                         original_content = entry.content[0].value if entry.content else ''
-                        content = original_content
+                        content = clean_text(original_content)
+
                         if 'Hourly Range' in content:
                             content = content.split('Hourly Range', 1)[0]
                         elif 'Budget' in content:
@@ -60,7 +76,7 @@ def parse_rss_feed(request):
                             title=title,
                             link=link,
                             published_date=published_date,
-                            content=content,  # This is the stripped content
+                            content=content,  # This is the stripped and cleaned content
                             pay_range=pay_range,
                             job_type=job_type,
                             category=category,
@@ -83,5 +99,3 @@ def parse_rss_feed(request):
         data = {'message': message}
         traceback.print_exc()  # Print the traceback for detailed error information
         return JsonResponse(data)
-
-
