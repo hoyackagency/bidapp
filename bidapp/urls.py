@@ -16,8 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from rssreader.views import parse_rss_feed
+from bidparser.views import FeedEntryView
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('parse-feed/', parse_rss_feed, name='parse_rss_feed')
+    path('parse-feed/', parse_rss_feed, name='parse_rss_feed'),
+    path('view/', FeedEntryView.as_view(), name='view-feed-entry'),
 ]

@@ -18,12 +18,14 @@ class Bid(models.Model):
         return f"Bid for: {self.bid_entry.title}"
 
 class Prompt(models.Model):
-    prompt_feed = models.OneToOneField(RSSFeed, on_delete=models.CASCADE)
+    title = models.CharField(default='',max_length=200)
+    rss_feed = models.OneToOneField(RSSFeed, on_delete=models.CASCADE)
     prompt_header = models.TextField(default='')
     prompt_body = models.TextField(default='')
     prompt_footer = models.TextField(default='')
     enabled = models.BooleanField(default=False)
+    iterations = models.IntegerField(default=1)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Prompt for: {self.prompt_feed.title}"
+        return f"Prompt for: {self.title.title}"

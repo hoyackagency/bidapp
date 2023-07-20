@@ -16,3 +16,13 @@ create an admin user:
 
 Start the webserver:
 `python manage.py runserver`
+
+#Notes
+To update Requirements:
+`pip freeze > requirements.txt`
+
+To push to Github
+`git add .`
+`git commit -m ""`
+`git push origin main`
+
