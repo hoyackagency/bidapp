@@ -1,15 +1,16 @@
 {
-    "id": 43,
+    "id": 48,
     "feed": {
         "feed_name": "USA"
     },
-    "title": "Help educate and tutor me on how to utilize AI for my job",
-    "link": "https://www.upwork.com/jobs/Help-educate-and-tutor-how-utilize-for-job",
-    "published_date": "2023-07-19T14:08:36Z",
-    "content": "I am looking to educate myself on AI and explore ways to utilize it for my work. I don't have any preconceived ideas other than I want to learn how to use AI in general for daily life and explore if I can utilize it for my work to help create compelling slides, or to analyze data or to take an article, perhaps video presentation and summarize important points. ",
-    "pay_range": "$15.00-$28.00",
+    "title": "Z-Wave Programming",
+    "link": "https://www.upwork.com/jobs/Wave-Programming_%7E01d615b67ba9829d02?source=rss",
+    "published_date": "2023-07-18T22:33:05Z",
+    "content": "I need to install firmware updates to 200 z-wave devices.  I would need someone to remote into a spare windows computer. setup a virtual machine and help setup the process to do batch firmware updates to z-wave devices.  I would need a list of all programs needed to purchase and correct z-wave to purchase for batch firmware updates.  Additionally, I would then give access after the firmware update to help program a z-wave system for a home.   ",
+    "pay_range": "$25.00-$100.00",
     "job_type": "Hourly",
-    "category": "Generative AI",
-    "skills": "AI Content Creation,     Data Augmentation,     Writing",
-    "country": "United States"
+    "category": "Network Administration",
+    "skills": "Microsoft Windows,     macOS,     Ubuntu",
+    "country": "United States",
+    "archived": false
 }

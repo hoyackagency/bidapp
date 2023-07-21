@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from rssreader.views import parse_rss_feed
 from bidparser.views import FeedEntryView
 
@@ -23,4 +23,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('parse-feed/', parse_rss_feed, name='parse_rss_feed'),
     path('view/', FeedEntryView.as_view(), name='view-feed-entry'),
+     path('webapp/', include('webapp.urls')),
 ]
