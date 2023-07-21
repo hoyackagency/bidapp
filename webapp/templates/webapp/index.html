@@ -8,28 +8,56 @@
     <title>My WebApp</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
+    <style>
+        .btn {
+            padding: 10px;
+        }
+        .btn-black {
+            background-color: black;
+            color: white;
+        }
+        .btn-red {
+            background-color: red;
+            color: white;
+        }
+        .btn-green {
+            background-color: green;
+            color: white;
+        }
+        .mt-2 {
+            margin-top: 2rem; 
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <div class="row align-items-center">
             <div class="col-md-1 text-center">
-                <i id="thumbsdown" class="fas fa-thumbs-down fa-2x"></i>
+                <button id="thumbsdown" class="btn btn-square btn-red">
+                    <i class="fas fa-thumbs-down"></i>
+                </button>
             </div>
             <div class="col-md-10">
                 <div class="card">
                     <div class="card-body">
-                        <h5 id="card-title" class="card-title">{{ data.title }}</h5>
+                        <h5 class="card-title">
+                            <a id="card-title" href="{{ data.link }}" target="_blank">{{ data.title }}</a>
+                        </h5>
                         <p id="card-content" class="card-text">{{ data.content }}</p>
                     </div>
                 </div>
             </div>
             <div class="col-md-1 text-center">
-                <i id="thumbsup" class="fas fa-thumbs-up fa-2x"></i>
+                <button id="thumbsup" class="btn btn-square btn-green">
+                    <i class="fas fa-thumbs-up"></i>
+                </button>
             </div>
         </div>
-        <div class="row justify-content-center">
+        <div class="row justify-content-center mt-2">
             <div class="col-md-1 text-center">
-                <i id="recycle" class="fas fa-arrow-right fa-2x"></i>
+                <button id="recycle" class="btn btn-rectangle btn-black">
+                    <i class="fas fa-arrow-right"></i>
+                </button>
             </div>
         </div>
     </div>
@@ -67,7 +95,9 @@
             fetch(`http://localhost:8000/view?recycle=true&feed_entry_id=${feed_entry_id}`)
                 .then(response => response.json())
                 .then(data => {
-                    document.getElementById('card-title').textContent = data.title;
+                    var titleElement = document.getElementById('card-title');
+                    titleElement.textContent = data.title;
+                    titleElement.href = data.link;  // set the href to the new URL
                     document.getElementById('card-content').textContent = data.content;
                     feed_entry_id = data.id;  // update feed entry id
                 })
