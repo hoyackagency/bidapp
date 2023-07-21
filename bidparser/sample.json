@@ -1,4 +1,15 @@
 {
+    "id": 43,
+    "feed": {
+        "feed_name": "USA"
+    },
     "title": "Help educate and tutor me on how to utilize AI for my job",
-    "link": "https://www.upwork.com/jobs/Help-educate-and-tutor-how-utilize-for-job_%7E016a2fecbc3a30b116?source=rss"
+    "link": "https://www.upwork.com/jobs/Help-educate-and-tutor-how-utilize-for-job",
+    "published_date": "2023-07-19T14:08:36Z",
+    "content": "I am looking to educate myself on AI and explore ways to utilize it for my work. I don't have any preconceived ideas other than I want to learn how to use AI in general for daily life and explore if I can utilize it for my work to help create compelling slides, or to analyze data or to take an article, perhaps video presentation and summarize important points. ",
+    "pay_range": "$15.00-$28.00",
+    "job_type": "Hourly",
+    "category": "Generative AI",
+    "skills": "AI Content Creation,     Data Augmentation,     Writing",
+    "country": "United States"
 }
