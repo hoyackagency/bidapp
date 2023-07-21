@@ -6,7 +6,7 @@ source env/bin/activate
 ```
 
 Install Requirements
-`pip install requirements`
+`pip install -r requirements.txt`
 
 To start the project 1st run:
 `python manage.py migrate`
