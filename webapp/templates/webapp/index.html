@@ -1,6 +1,5 @@
 <!-- myproject/webapp/templates/webapp/index.html -->
 {% load static %}
-{% load webapp_extras %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,15 +23,14 @@
                             <a id="card-title" href="{{ data.link }}" target="_blank">{{ data.title }}</a>
                         </h5>
                         <p id="card-content" class="card-text">{{ data.content }}</p>
-                        <p id="card-feed">Feed: {{ data.feed.feed_name }}</p>
-<!--                        <p id="card-published_date">Published Date: {{ data.published_date }}</p>-->
-                        <p id="card-pay_range">Pay Range: {{ data.pay_range }}</p>
-                        <p id="card-job_type">Job Type: {{ data.job_type }}</p>
-                        <p id="card-category">Category: {{ data.category }}</p>
-                        <p id="card-skills">Skills: {{ data.skills|to_badges }}</p>
-<!--                        <p id="card-skills">Skills: {{ data.skills }}</p> -->
-                        <p id="card-country">Country: {{ data.country }}</p>
-                    </div>                    
+                        <p><b>Feed:</b> <span id="card-feed-value">{{ data.feed.feed_name }}</span></p>
+                        <p><b>Pay Range:</b> <span id="card-pay_range-value">{{ data.pay_range }}</span></p>
+                        <p><b>Job Type:</b> <span id="card-job_type-value">{{ data.job_type }}</span></p>
+                        <p><b>Category:</b> <span id="card-category-value">{{ data.category }}</span></p>
+                        <p><b>Skills:</b> <span id="card-skills-value" data-skills="{{ data.skills }}">{{ data.skills }}</span></p>
+                        <p><b>Country:</b> <span id="card-country-value">{{ data.country }}</span></p>
+                    </div>
+                                
                 </div>
             </div>
             <div class="col-md-1 text-center">
@@ -52,6 +50,7 @@
         var feed_entry_id = "{{ data.id }}";  // get the id from the Django context
         var thumbs_down_url = "{% url 'thumbs_down' %}";
     </script>
+    <script src="{% static 'webapp/js/skills.js' %}"></script>
     <script src="{% static 'webapp/js/main.js' %}"></script>
 </body>
 </html>

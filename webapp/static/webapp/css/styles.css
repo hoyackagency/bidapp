@@ -19,3 +19,7 @@
 #recycle {
     color: white;
 }
+
+.bold-label {
+    font-weight: bold;
+}

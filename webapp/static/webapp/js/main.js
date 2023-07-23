@@ -24,6 +24,18 @@ document.getElementById("thumbsup").onclick = function() {
     sendStatus('accept');
 }
 
+function toBadges(value) {
+    // split the value into an array of skills
+    let skillsArray = value.split(',');
+
+    // create a badge for each skill
+    let badgesHTML = skillsArray.map(skill => `<span class="badge badge-pill badge-primary">${skill.trim()}</span>`).join(' ');
+
+    // return the HTML string of badges
+    return badgesHTML;
+}
+
+// use this function to set the badges HTML in the recycle function
 document.getElementById("recycle-btn").onclick = function() {
     fetch(`/view?recycle=true&feed_entry_id=${feed_entry_id}`)
     .then(response => response.json())
@@ -33,20 +45,21 @@ document.getElementById("recycle-btn").onclick = function() {
         // update the HTML elements with the new data
         document.getElementById("card-title").textContent = data.title;
         document.getElementById("card-content").textContent = data.content;
-        document.getElementById("card-feed").textContent = "Feed: " + data.feed.feed_name;
-        // document.getElementById("card-published_date").textContent = "Published Date: " + data.published_date;
-        document.getElementById("card-pay_range").textContent = "Pay Range: " + data.pay_range;
-        document.getElementById("card-job_type").textContent = "Job Type: " + data.job_type;
-        document.getElementById("card-category").textContent = "Category: " + data.category;
-        
-        // split the skills string into an array of skills
-        let skillsArray = data.skills.split(',');
-        // create a badge for each skill
-        let badgesHTML = skillsArray.map(skill => `<span class="badge badge-pill badge-primary">${skill.trim()}</span>`).join(' ');
-        // set the HTML of the skills element to the badges
-        document.getElementById("card-skills").innerHTML = "Skills: " + badgesHTML;
-        
-        document.getElementById("card-country").textContent = "Country: " + data.country;
+        document.getElementById("card-feed-value").textContent = data.feed.feed_name;
+        document.getElementById("card-pay_range-value").textContent = data.pay_range;
+        document.getElementById("card-job_type-value").textContent = data.job_type;
+        document.getElementById("card-category-value").textContent = data.category;
+
+        // Here the span element's content is updated, not the whole paragraph's, keeping the bold intact
+        var skills = data.skills.split(",");
+        var skillsHtml = "";
+        for (var i = 0; i < skills.length; i++) {
+            var skill = skills[i].trim();
+            skillsHtml += '<span class="badge badge-pill badge-primary">' + skill + '</span> ';
+        }
+        document.getElementById("card-skills-value").innerHTML = skillsHtml;
+
+        document.getElementById("card-country-value").textContent = data.country;
     })
     .catch((error) => {
         console.error('Error:', error);
