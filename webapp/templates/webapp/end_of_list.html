@@ -1,0 +1,27 @@
+<!-- myproject/webapp/templates/webapp/end_of_list.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>End of List</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #16141C;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+        img {
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <img src="{% static 'webapp/images/eol.png' %}" alt="End of list">
+</body>
+</html>
