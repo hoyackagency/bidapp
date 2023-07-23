@@ -17,8 +17,6 @@ class FeedEntryView(APIView):
         feed_entry = None
 
         if recycle and feed_entry_id:
-            # If recycle and feed_entry_id parameters are present,
-            # get the next feed entry after the given id
             try:
                 current_entry = FeedEntry.objects.get(id=feed_entry_id)
                 feed_entry = FeedEntry.objects.filter(
@@ -30,10 +28,7 @@ class FeedEntryView(APIView):
             except FeedEntry.DoesNotExist:
                 return Response({'error': 'Feed entry with given id does not exist.'}, status=status.HTTP_404_NOT_FOUND)
 
-        # If no feed entry has been found or if recycle or feed_entry_id parameters are not present
         if not feed_entry:
-            # Fetch the first FeedEntry that is not related to a Job 
-            # or is related to a Job with a 'recycle' status
             feed_entry = FeedEntry.objects.filter(
                 archived=False
             ).exclude(
@@ -41,9 +36,22 @@ class FeedEntryView(APIView):
             ).order_by('id').first()
 
         if not feed_entry:
-            return Response({'message': 'No feed entry found.'})
+            blank_data = {
+                "id": 0,
+                "feed": {"feed_name": ""},
+                "title": "",
+                "link": "",
+                "published_date": "",
+                "content": "",
+                "pay_range": "",
+                "job_type": "",
+                "category": "",
+                "skills": "",
+                "country": "",
+                "archived": True
+            }
+            return Response(blank_data)
 
-        # If a related job exists, serialize it, else return the feed entry details
         try:
             job = Job.objects.get(feed_entry=feed_entry)
             serializer = JobSerializer(job)
@@ -56,7 +64,6 @@ class FeedEntryView(APIView):
         feed_entry_id = request.data.get('feed_entry_id')
         job_status = request.data.get('status')
 
-        # validate the data
         if not feed_entry_id or not job_status:
             return Response({'error': 'Both feed_entry_id and status are required.'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -66,15 +73,12 @@ class FeedEntryView(APIView):
         feed_entry = get_object_or_404(FeedEntry, id=feed_entry_id)
 
         if job_status == 'decline':
-            # if the status is 'decline', set 'archived' field of the FeedEntry to True
             feed_entry.archived = True
             feed_entry.save()
             return Response({'message': f'FeedEntry {feed_entry_id} archived.'})
         else:
-            # Check if a Job already exists for the given feed_entry
             if Job.objects.filter(feed_entry=feed_entry).exists():
                 return Response({'error': 'Job already exists for the given feed_entry.'}, status=status.HTTP_400_BAD_REQUEST)
 
-            # create the Job
             Job.objects.create(feed_entry=feed_entry, status=job_status)
             return Response({'message': 'Job created successfully.'})
