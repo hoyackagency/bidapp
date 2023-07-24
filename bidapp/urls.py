@@ -16,12 +16,18 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rssreader.views import parse_rss_feed
-from bidparser.views import FeedEntryView
+from bidparser.views import FeedEntryView, JobsView, JobViewSet
+from rest_framework.routers import DefaultRouter
 
+router = DefaultRouter()
+router.register(r'jobs', JobViewSet, basename='jobs')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('parse-feed/', parse_rss_feed, name='parse_rss_feed'),
     path('view/', FeedEntryView.as_view(), name='view-feed-entry'),
-     path('webapp/', include('webapp.urls')),
+    path('webapp/', include('webapp.urls')),
+    path('jobs/', JobsView.as_view(), name='jobs'),
 ]
+
+urlpatterns += router.urls

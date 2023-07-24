@@ -6,6 +6,10 @@ from .models import Job, FeedEntry
 from .serializers import JobSerializer
 from rssreader.serializers import FeedEntrySerializer
 from .handlers import get_next_feed_entry, create_or_update_job
+from .serializers import JobSerializer
+from django.db.models import Prefetch
+from rest_framework import generics
+from rest_framework import viewsets
 
 class FeedEntryView(APIView):
 
@@ -33,3 +37,18 @@ class FeedEntryView(APIView):
 
         response, status_code = create_or_update_job(feed_entry_id, job_status)
         return Response(response, status=status_code)
+
+class JobsView(generics.ListAPIView):
+    queryset = Job.objects.all().prefetch_related(
+        Prefetch('feed_entry', queryset=FeedEntry.objects.all())
+    )
+    serializer_class = JobSerializer
+
+class JobViewSet(viewsets.ModelViewSet):
+    """
+    A simple ViewSet for viewing and editing jobs.
+    """
+    queryset = Job.objects.all().prefetch_related(
+        Prefetch('feed_entry', queryset=FeedEntry.objects.all())
+    )
+    serializer_class = JobSerializer
