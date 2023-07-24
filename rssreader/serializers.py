@@ -5,7 +5,7 @@ from .models import FeedEntry, RSSFeed
 class RSSFeedSerializer(serializers.ModelSerializer):
     class Meta:
         model = RSSFeed
-        fields = ['feed_name']
+        fields = '__all__'
 
 class FeedEntrySerializer(serializers.ModelSerializer):
     feed = RSSFeedSerializer()
