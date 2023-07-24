@@ -28,6 +28,7 @@ urlpatterns = [
     path('view/', FeedEntryView.as_view(), name='view-feed-entry'),
     path('webapp/', include('webapp.urls')),
     path('jobs/', JobsView.as_view(), name='jobs'),
-]
+    path('rssreader/', include('rssreader.urls')),  # include the urls from rssreader app
+    ]
 
 urlpatterns += router.urls

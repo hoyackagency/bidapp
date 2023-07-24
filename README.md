@@ -17,6 +17,10 @@ create an admin user:
 Start the webserver:
 `python manage.py runserver`
 
+#Cron Jobs
+Set up a CRON to trigger RSS feed updates at the desired interval:
+`curl http://localhost:8000/parse-feed/`
+
 #API Examples
 `curl -X POST -H "Content-Type: application/json" -d '{"feed_entry_id": 47, "status": "decline"}' http://localhost:8000/view/`
 `curl -X POST -H "Content-Type: application/json" -d '{"feed_entry_id": 50, "status": "accept"}' http://localhost:8000/view/`
