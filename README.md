@@ -5,6 +5,8 @@ python3 -m venv env
 source env/bin/activate
 ```
 
+Or use Conda
+
 Install Requirements
 `pip install -r requirements.txt`
 
