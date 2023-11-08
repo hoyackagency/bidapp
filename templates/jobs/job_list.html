@@ -1,0 +1,175 @@
+{% extends "layouts/base.html" %} {% block title %} Jobs {% endblock title %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+<style></style>
+
+{% endblock stylesheets %} {% block content %}
+
+<div class="row">
+  <div class="col-12">
+    <div class="card card-chart px-4">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-sm-6 text-left">
+            <h2 class="card-title">Jobs</h2>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="toolbar">
+          <!--        Here you can write extra buttons/actions for the toolbar              -->
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-chart px-4">
+      <div class="card-header mb-4">
+        <div class="row">
+          <div class="col-sm-6 text-left">
+            <h3 class="card-title">Jobs</h3>
+          </div>
+
+          <div class="col-sm-3">
+            <select
+              id="job-status-selector"
+              class="selectpicker"
+              data-style="btn btn-info"
+              title="Choose Status"
+              data-size="5"
+              onchange="changeStatus(this)"
+            >
+              <option value="0" selected>All</option>
+              <option value="1">Created</option>
+              <option value="2">Written</option>
+              <option value="3">Pending</option>
+              <option value="4">Posted</option>
+              <option value="5">Failed</option>
+            </select>
+          </div>
+          <div class="col-sm-3">
+            <!-- Show archived jobs -->
+          </div>
+        </div>
+      </div>
+      <div class="card-body min-vh-60">
+        <table id="jobs-table" class="table table-striped">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Title</th>
+              <th>Pay Range</th>
+              <th>Job Type</th>
+              <th>Category</th>
+              <th>Country</th>
+              <th>Status</th>
+              <th>Published</th>
+              <th
+                class="sorting_desc_disabled sorting_asc_disabled text-center"
+              >
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody id="jobs-data-content"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<script>
+
+function jobRefresh() {
+    var jobStatusType = document.getElementById("job-status-selector");
+    console.log("status type :", jobStatusType.value);
+
+    $.ajax({
+      url: "{% url 'job_list' %}",
+      type: "GET",
+      data: {
+        status: jobStatusType.value,
+      },
+      cache: false,
+      success: function (jobs) {
+        console.log("jobs :", jobs);
+        var elements = makeJobElements(jobs);
+        $("#jobs-data-content").html(elements);
+
+        //var runs_table = $('#runs-table').DataTable({
+        //  destroy: true,
+        //  order: [[0, "desc"]]
+        //});
+      },
+    });
+  }
+
+  function changeStatus(selectObject) {
+    var jobStatusType = document.getElementById("job-status-selector");
+    jobStatusType.value = selectObject.value;
+    console.log("status type :", jobStatusType.value);
+
+    $.ajax({
+      url: "{% url 'job_list' %}",
+      type: "GET",
+      data: {
+        status: jobStatusType.value,
+      },
+      cache: false,
+      success: function (jobs) {
+        console.log("jobs :", jobs);
+        var elements = makeJobElements(jobs);
+        $("#jobs-data-content").html(elements);
+
+        //var runs_table = $('#runs-table').DataTable({
+        //  destroy: true,
+        //  order: [[0, "desc"]]
+        //});
+      },
+    });
+  }
+
+  function makeJobElements(jobs) {
+    var elements = "";
+    for (let job of jobs) {
+      var element = `
+        <tr>
+          <td>
+            <a href="/jobs/${job.id}">${job.id}</a>
+          </td>
+          <td>
+            <a href="${job.link}" target="_blank">${job.title}</a>
+          </td>
+          <td>${job.pay_range}</td>
+          <td>${job.job_type}</td>
+          <td>${job.category}</td>
+          <td>${job.country}</td>
+          <td>${job.status}</td>
+          <td>${job.published_date}</td>
+          <td class="text-center">
+            <a href="/jobs/${job.id}/archive" class="btn btn-link btn-danger btn-icon btn-sm remove"><i class="tim-icons icon-simple-remove"></i></a>
+          </td>
+        </tr>
+      `;
+
+      elements += element;
+    }
+    return elements;
+  }
+
+  $(document).ready(function () {
+    var jobs_table = $('#jobs-table').DataTable();
+    
+    jobRefresh();
+    var int = setInterval("jobRefresh()", 10000);
+  });
+
+</script>
+
+{% endblock javascripts %}

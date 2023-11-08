@@ -1,0 +1,73 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Edit Worker {% endblock title %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+{% endblock stylesheets %} 
+
+{% block content %}
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">Edit Worker</h2>
+      </div>
+
+      <div class="mx-4 mt-4">
+        <form id="workerEditForm" method="post" class="form-horizontal" novalidate>
+          {% csrf_token %} 
+
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">Worker ID</label>
+            <div class="col-sm-10">
+              <div class="form-group">
+                <input type="number" class="form-control" name="wid" value="{{ worker.wid }}">
+              </div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">Name</label>
+            <div class="col-sm-10">
+              <div class="form-group">
+                <input type="text" class="form-control" name="name" value="{{ worker.name }}">
+              </div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">Description</label>
+            <div class="col-sm-10">
+              <div class="form-group">
+                <input type="text" class="form-control" name="description" value="{{ worker.description }}">
+              </div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">Address</label>
+            <div class="col-sm-10">
+              <div class="form-group">
+                <input type="text" class="form-control" name="address" value="{{ worker.address }}">
+              </div>
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <button type="submit" class="btn btn-fill btn-primary">Update</button>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+{% endblock javascripts %}

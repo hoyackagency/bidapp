@@ -15,20 +15,23 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from rssreader.views import parse_rss_feed
-from bidparser.views import FeedEntryView, JobsView, JobViewSet
+from rssreader.views import parse_rss_feed_view
+from jobs.apiviews import FeedEntryView, JobsView, JobViewSet
 from rest_framework.routers import DefaultRouter
+from feeds.views import feed_list_view
 
 router = DefaultRouter()
 router.register(r'jobs', JobViewSet, basename='jobs')
 
 urlpatterns = [
+    path('', feed_list_view, name='home'),
     path('admin/', admin.site.urls),
-    path('parse-feed/', parse_rss_feed, name='parse_rss_feed'),
-    path('view/', FeedEntryView.as_view(), name='view-feed-entry'),
-    path('webapp/', include('webapp.urls')),
-    path('jobs/', JobsView.as_view(), name='jobs'),
-    path('rssreader/', include('rssreader.urls')),  # include the urls from rssreader app
-    ]
+    path('parse-feed/', parse_rss_feed_view, name='parse_rss_feed'),
+    path('rssreader/', include('rssreader.urls')),
+    path('view/', FeedEntryView.as_view(), name='view_feed_entry'),
+    path('jobs/', include('jobs.urls')),
+    path('feeds/', include('feeds.urls')),
+    path('scheduler/', include('scheduler.urls'))
+]
 
 urlpatterns += router.urls

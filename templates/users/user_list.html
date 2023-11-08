@@ -1,0 +1,138 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Users {% endblock title %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+<style>
+</style>
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-12">
+    <div class="card card-chart px-4">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-sm-6 text-left">
+            <h2 class="card-title">Users</h2>
+          </div>
+        </div>
+        {% comment %} <div class="row">
+          <div class="col-sm-6 text-left mt-4">
+            <button 
+              id="add_user_btn_id" 
+              class='btn btn-md'
+              onclick="window.location='{% url "user_create" %}';"
+            >New</button>
+          </div>
+        </div> {% endcomment %}
+      </div>
+      <div class="card-body">
+        <div class="toolbar">
+          <!--        Here you can write extra buttons/actions for the toolbar              -->
+        </div>
+        <table id="user-list-table" class="table table-striped">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th class="text-center">Avatar</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Active</th>
+              <th>Staff</th>
+              <th>Service Level</th>
+              <th>API Usage</th>
+              <th>Modules</th>
+              <th>Workers</th>
+              <th>Token Balance</th>
+              <th class="sorting_desc_disabled sorting_asc_disabled text-right">Actions</th>
+            </tr>
+          </thead>
+          
+          <tbody>
+          
+            {% for user, avatar in dataset %}
+
+            <tr>
+              <td>{{ user.id }}</td>
+              <td class="text-center">
+                <div class="photo">
+                  {% if avatar %}
+                  <img class="avatar" src="{{ avatar }}" alt="">
+                  {% else %}
+                  <img class="avatar" src="/static/assets/img/placeholder.jpg" alt="{{ user.username }}">
+                  {% endif %}
+                </div>
+              </td>
+              <td>{{ user.username }}</td>
+              <td>{{ user.email }}</td>
+              <td>{{ user.is_active }}</td>
+              <td>{{ user.is_staff }}</td>
+              <td>{{ user.profile.service_level }}</td>
+              <td>{{ user.profile.api_usage }}</td>
+              <td>
+                <div class="overflow-auto" style="max-width:250px;max-height:200px">
+                  {% for module_name in user.profile.get_module_names %}
+                    <p>{{ module_name }}</p>
+                  {% endfor %}
+                </div>
+              </td>
+              <td>
+                <div class="overflow-auto" style="max-width:150px;max-height:200px">
+                  {% for worker_name in user.profile.get_worker_names %}
+                    <p>{{ worker_name }}</p>
+                  {% endfor %}
+                </div>
+              </td>
+              <td>{{ user.profile.token_balance }}</td>
+              <td class="text-right">
+                <a href="{% url "user_edit" user.id %}" class="btn btn-link btn-warning btn-icon btn-sm edit"><i class="tim-icons icon-pencil"></i></a>
+              </td>
+            </tr>
+
+            {% endfor %}
+
+          </tbody>
+
+          <tfoot>
+            <tr>
+              <th>ID</th>
+              <th class="text-center">Avatar</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Active</th>
+              <th>Staff</th>
+              <th>Service Level</th>
+              <th>API Usage</th>
+              <th>Modules</th>
+              <th>Workers</th>
+              <th>Token Balance</th>              
+              <th class="disabled-sorting text-right">Actions</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<script>
+
+  $(document).ready(function () {
+    var table = $('#user-list-table').DataTable({
+      "scrollX": true
+    });
+  });
+
+</script>
+
+{% endblock javascripts %}

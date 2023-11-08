@@ -1,0 +1,49 @@
+
+    <div class="sidebar">
+      <div class="sidebar-wrapper">
+        
+        <ul class="nav">
+          
+          {% if is_staff %}
+
+          <li {% if view_name == "USERS" %} class="active" {% endif %}>
+            <a href="{% url 'user_list' %}">
+              <i class="tim-icons icon-single-02"></i>
+              <p>Users</p>
+            </a>
+          </li>
+          
+          <li {% if view_name == "WORKERS" %} class="active" {% endif %}>
+            <a href="{% url 'worker_list' %}">
+              <i class="tim-icons icon-molecule-40"></i>
+              <p>Workers</p>
+            </a>
+          </li>
+
+          <li {% if view_name == "SETTINGS" %} class="active" {% endif %}>
+            <a href="{% url 'settings' %}">
+              <i class="tim-icons icon-settings"></i>
+              <p>Settings</p>
+            </a>
+          </li>
+          
+          {% else %}
+
+          <li {% if view_name == "FEEDS" %} class="active" {% endif %}>
+            <a href="{% url 'feed_list' %}">
+              <i class="fa fa-rss"></i>
+              <p>Feeds</p>
+            </a>
+          </li>
+
+          <li {% if view_name == "JOBS" %} class="active" {% endif %}>
+            <a href="{% url 'job_list' %}">
+              <i class="fa fa-paper-plane"></i>
+              <p>Jobs</p>
+            </a>
+          </li>
+
+          {% endif %}
+        </ul>
+      </div>
+    </div>

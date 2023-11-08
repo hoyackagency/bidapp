@@ -9,6 +9,10 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
+import os
+from pathlib import Path
+from dotenv import load_dotenv
+load_dotenv()
 
 from pathlib import Path
 import logging.config
@@ -38,9 +42,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_crontab',
     'rssreader',
-    'bidparser',
-    'webapp'
+    'feeds',
+    'jobs',
+    'webapp',
+    'scheduler',
+    'callbackapi',
 ]
 
 MIDDLEWARE = [
@@ -54,11 +62,12 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'bidapp.urls'
+TEMPLATE_DIR = os.path.join(BASE_DIR, "templates")  # ROOT dir for templates
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [TEMPLATE_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -66,7 +75,11 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media'
             ],
+            'libraries' : {
+                'staticfiles': 'django.templatetags.static', 
+            }
         },
     },
 ]
@@ -84,6 +97,16 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': os.environ.get("DB_ENGINE"),
+#         'NAME': os.environ.get("DB_NAME"),
+#         'USER': os.environ.get("DB_USERNAME"),
+#         'PASSWORD': os.environ.get("DB_PASSWORD"),
+#         'HOST': os.environ.get("DB_HOST"),
+#         'PORT': os.environ.get("DB_PORT"),
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -121,7 +144,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
+
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -157,3 +186,23 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',
     ]
 }
+
+# RabbitMQ settings
+MQ_USER = os.environ.get("MQ_USER")
+MQ_PASS = os.environ.get("MQ_PASS")
+MQ_HOST = os.environ.get("MQ_HOST")
+
+RUN_QUEUE = "bidapp.worker.run.queue"
+EXCHANGE_KILL = "bidapp.worker.kill"
+EXCHANGE_KILL_KEY = "bidapp.kill"
+
+# BidAPP URL
+BIDAPP_URL = os.environ.get("BIDAPP_URL")
+BIDMAKER_URL = os.environ.get("BIDMAKER_URL")
+
+# cron job
+CRONJOBS = [
+    ('*/3 * * * *', 'scheduler.cron.do_schedule', '>> /tmp/scheduled_job.log')
+]
+
+MODULE_ID_UPWORKBID = 1

@@ -1,7 +1,7 @@
 // main.js
 
 function sendStatus(status) {
-    fetch(thumbs_down_url, {
+    fetch(thumbs_updown_url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -49,16 +49,8 @@ document.getElementById("recycle-btn").onclick = function() {
         document.getElementById("card-pay_range-value").textContent = data.pay_range;
         document.getElementById("card-job_type-value").textContent = data.job_type;
         document.getElementById("card-category-value").textContent = data.category;
-
-        // Here the span element's content is updated, not the whole paragraph's, keeping the bold intact
-        var skills = data.skills.split(",");
-        var skillsHtml = "";
-        for (var i = 0; i < skills.length; i++) {
-            var skill = skills[i].trim();
-            skillsHtml += '<span class="badge badge-pill badge-primary">' + skill + '</span> ';
-        }
+        var skillsHtml = toBadges(data.skills);
         document.getElementById("card-skills-value").innerHTML = skillsHtml;
-
         document.getElementById("card-country-value").textContent = data.country;
     })
     .catch((error) => {

@@ -1,0 +1,111 @@
+{% extends "layouts/base.html" %} {% block title %} Feeds {% endblock title %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+<style></style>
+
+{% endblock stylesheets %} {% block content %}
+
+<div class="row">
+  <div class="col-12">
+    <div class="card card-chart px-4">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-sm-6 text-left">
+            <h2 class="card-title">Feeds</h2>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="toolbar">
+          <!--        Here you can write extra buttons/actions for the toolbar              -->
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-chart px-4">
+      <div class="card-header mb-4">
+        <div class="row">
+          <div class="col-sm-6 text-left">
+            <h3 class="card-title">Feeds</h3>
+          </div>
+          <div class="col-sm-3">
+            <!-- Show archived feeds -->
+          </div>
+        </div>
+      </div>
+      <div class="card-body min-vh-60">
+        <table id="feeds-table" class="table table-striped">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Title</th>
+              <th>Pay Range</th>
+              <th>Job Type</th>
+              <th>Category</th>
+              <th>Country</th>
+              <th>Published</th>
+            </tr>
+          </thead>
+          <tbody id="feeds-data-content"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<script>
+
+function feedsRefresh() {
+    $.ajax({
+      url: "{% url 'feed_list' %}",
+      type: "GET",
+      cache: false,
+      success: function (feeds) {
+        console.log("feeds :", feeds);
+        var elements = makeFeedElements(feeds);
+        $("#feeds-data-content").html(elements);
+      },
+    });
+  }
+
+  function makeFeedElements(feeds) {
+    var elements = "";
+    for (let feed of feeds) {
+      var element = `
+        <tr>
+          <td>
+            <a href="/feeds/${feed.id}">${feed.id}</a>
+          </td>
+          <td>
+            <a href="${feed.link}" target="_blank">${feed.title}</a>
+          </td>
+          <td>${feed.pay_range}</td>
+          <td>${feed.job_type}</td>
+          <td>${feed.category}</td>
+          <td>${feed.country}</td>
+          <td>${feed.published_date}</td>
+        </tr>
+      `;
+
+      elements += element;
+    }
+    return elements;
+  }
+
+  $(document).ready(function () {
+    var feeds_table = $('#feeds-table').DataTable();
+    
+    feedsRefresh();
+    var int = setInterval("feedsRefresh()", 10000);
+  });
+
+</script>
+
+{% endblock javascripts %}

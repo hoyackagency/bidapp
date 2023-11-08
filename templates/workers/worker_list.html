@@ -1,0 +1,260 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Workers {% endblock title %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+<style>
+</style>
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-12">
+    <div class="card card-chart px-4">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-sm-6 text-left">
+            <h2 class="card-title">Workers</h2>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6 text-left mt-4">
+            <button 
+              id="add_worker_btn_id" 
+              class='btn btn-md'
+              onclick="window.location='{% url "worker_create" %}';"
+            >New</button>
+          </div>
+          <div class="col-sm-2 text-left mt-4">
+            <button 
+              id="pause_worker_btn_id" 
+              class='btn btn-md'
+              onclick="pause_workers();"
+            >Pause Workers</button>
+          </div>
+          <div class="col-sm-2 text-left mt-4">
+            <button 
+              id="resume_worker_btn_id" 
+              class='btn btn-md'
+              onclick="resume_workers();"
+            >Resume Workers</button>
+          </div>
+          <div class="col-sm-2 text-left mt-4">
+            <button 
+              id="reload_worker_btn_id" 
+              class='btn btn-md'
+              onclick="reload_workers();"
+            >Reload Workers</button>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="toolbar">
+          <!--        Here you can write extra buttons/actions for the toolbar              -->
+        </div>
+        <table id="worker-list-table" class="table table-striped">
+          <thead>
+            <tr>
+              <th>Worker ID</th>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Address</th>
+              <th>IP Address</th>
+              <th>Alive</th>
+              <th>Running</th>
+              <th>Commands(remained)</th>
+              <th class="sorting_desc_disabled sorting_asc_disabled text-right">Actions</th>
+            </tr>
+          </thead>
+          
+          <tbody id="worker-list-content">
+          
+            {% comment %} {% for worker in workers %}
+
+            <tr>
+              <td>{{ worker.wid }}</td>
+              <td>{{ worker.name }}</td>
+              <td>{{ worker.description }}</td>
+              <td>{{ worker.address }}</td>
+              <td>{{ worker.alive }}</td>
+              <td>{{ worker.running }}</td>
+              <td>{{ worker.commands }}</td>
+              <td class="text-right">
+                <a href="{% url "worker_edit" worker.id %}" class="btn btn-link btn-warning btn-icon btn-sm edit"><i class="tim-icons icon-pencil"></i></a>
+                <a href="{% url "worker_delete" worker.id %}" class="btn btn-link btn-danger btn-icon btn-sm ml-2 remove"><i class="tim-icons icon-simple-remove"></i></a>
+              </td>
+            </tr>
+
+            {% endfor %} {% endcomment %}
+
+          </tbody>
+
+          <tfoot>
+            <tr>
+              <th>Worker ID</th>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Address</th>
+              <th>IP Address</th>
+              <th>Alive</th>
+              <th>Running</th>
+              <th>Commands(remained)</th>
+              <th class="disabled-sorting text-right">Actions</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<script>
+
+  function pause_workers() {
+    var pauseButton = document.getElementById("pause_worker_btn_id");
+    pauseButton.disabled = true;
+    // enable pause button after 10 seconds
+    var interval = setInterval("enable_pause_btn()", 10000);
+
+    // pause 
+    $.ajax({
+      url: "{% url 'worker_list' %}",
+      type: "GET",
+      data: {
+        cmd: 'pause'
+      },
+      cache: false,
+      success: function(workers) {
+        console.log("workers :", workers);
+        var elements = makeWorkerElements(workers);
+        $('#worker-list-content').html(elements);
+      }
+    });
+  }
+
+  function enable_pause_btn() {
+    var pauseButton = document.getElementById("pause_worker_btn_id");
+    pauseButton.disabled = false;
+  }
+
+
+  function resume_workers() {
+    var resumeButton = document.getElementById("resume_worker_btn_id");
+    resumeButton.disabled = true;
+    // enable resume button after 10 seconds
+    var interval = setInterval("enable_resume_btn()", 10000);
+
+    // resume 
+    $.ajax({
+      url: "{% url 'worker_list' %}",
+      type: "GET",
+      data: {
+        cmd: 'resume'
+      },
+      cache: false,
+      success: function(workers) {
+        console.log("workers :", workers);
+        var elements = makeWorkerElements(workers);
+        $('#worker-list-content').html(elements);
+      }
+    });
+  }
+
+  function enable_resume_btn() {
+    var resumeButton = document.getElementById("resume_worker_btn_id");
+    resumeButton.disabled = false;
+  }
+
+
+  function reload_workers() {
+    var reloadButton = document.getElementById("reload_worker_btn_id");
+    reloadButton.disabled = true;
+    //  reload button after 10 mins
+    var interval = setInterval("enable_reload_btn()", 600000);
+
+    // reload 
+    $.ajax({
+      url: "{% url 'worker_list' %}",
+      type: "GET",
+      data: {
+        cmd: 'reload'
+      },
+      cache: false,
+      success: function(workers) {
+        console.log("workers :", workers);
+        var elements = makeWorkerElements(workers);
+        $('#worker-list-content').html(elements);
+      }
+    });
+  }
+
+  function enable_reload_btn() {
+    var reloadButton = document.getElementById("reload_worker_btn_id");
+    reloadButton.disabled = false;
+  }
+
+  function worker_refresh() {
+    $.ajax({
+      url: "{% url 'worker_list' %}",
+      type: "GET",
+      data: {
+        cmd: 'refresh'
+      },
+      cache: false,
+      success: function(workers) {
+        console.log("workers :", workers);
+        var elements = makeWorkerElements(workers);
+        $('#worker-list-content').html(elements);
+
+        //var worker_table = $('#worker-list-table').DataTable({
+        //  destroy: true,
+        //  order: [[0, "asc"]]
+        //});
+      }
+    });
+  };
+
+  function makeWorkerElements(workers) {
+    var elements = "";
+    for (let worker of workers) {
+      var alive = worker.alive ? "alive" : "dead";
+      var running = worker.running ? "running" : "idle";
+      var element = `
+        <tr>
+          <td>${worker.wid}</td>
+          <td>${worker.name}</td>
+          <td>${worker.description}</td>
+          <td>${worker.address}</td>
+          <td>${worker.ipaddress}</td>
+          <td>${alive}</td>
+          <td>${running}</td>
+          <td>${worker.commands}</td>
+          <td class="text-right">
+            <a href="/admin/workers/edit/${worker.worker_id}" class="btn btn-link btn-warning btn-icon btn-sm edit"><i class="tim-icons icon-pencil"></i></a>
+            <a href="/admin/workers/delete/${worker.worker_id}" class="btn btn-link btn-danger btn-icon btn-sm ml-2 remove"><i class="tim-icons icon-simple-remove"></i></a>
+          </td>
+        </tr>
+      `;
+      elements += element;
+    }
+    return elements;
+  }
+
+  $(document).ready(function () {
+    var table = $('#worker-list-table').DataTable();
+    worker_refresh();
+    var interval = setInterval("worker_refresh()", 10000);
+  });
+
+</script>
+
+{% endblock javascripts %}
