@@ -29,27 +29,6 @@
               onclick="window.location='{% url "worker_create" %}';"
             >New</button>
           </div>
-          <div class="col-sm-2 text-left mt-4">
-            <button 
-              id="pause_worker_btn_id" 
-              class='btn btn-md'
-              onclick="pause_workers();"
-            >Pause Workers</button>
-          </div>
-          <div class="col-sm-2 text-left mt-4">
-            <button 
-              id="resume_worker_btn_id" 
-              class='btn btn-md'
-              onclick="resume_workers();"
-            >Resume Workers</button>
-          </div>
-          <div class="col-sm-2 text-left mt-4">
-            <button 
-              id="reload_worker_btn_id" 
-              class='btn btn-md'
-              onclick="reload_workers();"
-            >Reload Workers</button>
-          </div>
         </div>
       </div>
       <div class="card-body">
@@ -62,7 +41,6 @@
               <th>Worker ID</th>
               <th>Name</th>
               <th>Description</th>
-              <th>Address</th>
               <th>IP Address</th>
               <th>Alive</th>
               <th>Running</th>
@@ -79,7 +57,6 @@
               <td>{{ worker.wid }}</td>
               <td>{{ worker.name }}</td>
               <td>{{ worker.description }}</td>
-              <td>{{ worker.address }}</td>
               <td>{{ worker.alive }}</td>
               <td>{{ worker.running }}</td>
               <td>{{ worker.commands }}</td>
@@ -98,7 +75,6 @@
               <th>Worker ID</th>
               <th>Name</th>
               <th>Description</th>
-              <th>Address</th>
               <th>IP Address</th>
               <th>Alive</th>
               <th>Running</th>
@@ -118,89 +94,6 @@
 {% block javascripts %}
 
 <script>
-
-  function pause_workers() {
-    var pauseButton = document.getElementById("pause_worker_btn_id");
-    pauseButton.disabled = true;
-    // enable pause button after 10 seconds
-    var interval = setInterval("enable_pause_btn()", 10000);
-
-    // pause 
-    $.ajax({
-      url: "{% url 'worker_list' %}",
-      type: "GET",
-      data: {
-        cmd: 'pause'
-      },
-      cache: false,
-      success: function(workers) {
-        console.log("workers :", workers);
-        var elements = makeWorkerElements(workers);
-        $('#worker-list-content').html(elements);
-      }
-    });
-  }
-
-  function enable_pause_btn() {
-    var pauseButton = document.getElementById("pause_worker_btn_id");
-    pauseButton.disabled = false;
-  }
-
-
-  function resume_workers() {
-    var resumeButton = document.getElementById("resume_worker_btn_id");
-    resumeButton.disabled = true;
-    // enable resume button after 10 seconds
-    var interval = setInterval("enable_resume_btn()", 10000);
-
-    // resume 
-    $.ajax({
-      url: "{% url 'worker_list' %}",
-      type: "GET",
-      data: {
-        cmd: 'resume'
-      },
-      cache: false,
-      success: function(workers) {
-        console.log("workers :", workers);
-        var elements = makeWorkerElements(workers);
-        $('#worker-list-content').html(elements);
-      }
-    });
-  }
-
-  function enable_resume_btn() {
-    var resumeButton = document.getElementById("resume_worker_btn_id");
-    resumeButton.disabled = false;
-  }
-
-
-  function reload_workers() {
-    var reloadButton = document.getElementById("reload_worker_btn_id");
-    reloadButton.disabled = true;
-    //  reload button after 10 mins
-    var interval = setInterval("enable_reload_btn()", 600000);
-
-    // reload 
-    $.ajax({
-      url: "{% url 'worker_list' %}",
-      type: "GET",
-      data: {
-        cmd: 'reload'
-      },
-      cache: false,
-      success: function(workers) {
-        console.log("workers :", workers);
-        var elements = makeWorkerElements(workers);
-        $('#worker-list-content').html(elements);
-      }
-    });
-  }
-
-  function enable_reload_btn() {
-    var reloadButton = document.getElementById("reload_worker_btn_id");
-    reloadButton.disabled = false;
-  }
 
   function worker_refresh() {
     $.ajax({
@@ -233,7 +126,6 @@
           <td>${worker.wid}</td>
           <td>${worker.name}</td>
           <td>${worker.description}</td>
-          <td>${worker.address}</td>
           <td>${worker.ipaddress}</td>
           <td>${alive}</td>
           <td>${running}</td>

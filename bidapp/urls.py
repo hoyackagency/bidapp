@@ -27,11 +27,13 @@ urlpatterns = [
     path('', feed_list_view, name='home'),
     path('admin/', admin.site.urls),
     path('parse-feed/', parse_rss_feed_view, name='parse_rss_feed'),
+    path('worker/', include('workers.urls')),
     path('rssreader/', include('rssreader.urls')),
     path('view/', FeedEntryView.as_view(), name='view_feed_entry'),
     path('jobs/', include('jobs.urls')),
     path('feeds/', include('feeds.urls')),
-    path('scheduler/', include('scheduler.urls'))
+    path('scheduler/', include('scheduler.urls')),
+    path('cb/', include('callbackapi.urls'))
 ]
 
 urlpatterns += router.urls

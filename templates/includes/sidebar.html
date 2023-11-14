@@ -13,13 +13,6 @@
             </a>
           </li>
           
-          <li {% if view_name == "WORKERS" %} class="active" {% endif %}>
-            <a href="{% url 'worker_list' %}">
-              <i class="tim-icons icon-molecule-40"></i>
-              <p>Workers</p>
-            </a>
-          </li>
-
           <li {% if view_name == "SETTINGS" %} class="active" {% endif %}>
             <a href="{% url 'settings' %}">
               <i class="tim-icons icon-settings"></i>
@@ -28,6 +21,13 @@
           </li>
           
           {% else %}
+
+          <li {% if view_name == "WORKERS" %} class="active" {% endif %}>
+            <a href="{% url 'worker_list' %}">
+              <i class="fa fa-desktop"></i>
+              <p>Workers</p>
+            </a>
+          </li>
 
           <li {% if view_name == "FEEDS" %} class="active" {% endif %}>
             <a href="{% url 'feed_list' %}">

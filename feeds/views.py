@@ -5,7 +5,7 @@ from .models import FeedEntry, Job
 
 
 def feed_list_view(request):
-    feeds = FeedEntry.objects.filter(archived=False).order_by('id')
+    feeds = FeedEntry.objects.filter(archived=False).order_by('-id')
 
     if request.is_ajax():
         result = []
@@ -64,19 +64,19 @@ def feed_detail_view(request, *args, **kwargs):
                 feed = FeedEntry.objects.filter(
                     id__lt=feed.id,
                     archived=False
-                ).order_by('id').first()
+                ).order_by('-id').first()
                 needRedirect = True
             elif status == "next":
                 feed = FeedEntry.objects.filter(
                     id__gt=feed.id,
                     archived=False
-                ).order_by('id').first()
+                ).order_by('-id').first()
                 needRedirect = True
 
             if not feed:
                 feed = FeedEntry.objects.filter(
                     archived=False
-                ).order_by('id').first()
+                ).order_by('-id').first()
 
         if not feed:
             return redirect(reverse_lazy('feed_list'))

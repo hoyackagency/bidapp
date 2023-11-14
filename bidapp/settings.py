@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_crontab',
+    'widget_tweaks',
+    'workers',
     'rssreader',
     'feeds',
     'jobs',
@@ -192,9 +194,9 @@ MQ_USER = os.environ.get("MQ_USER")
 MQ_PASS = os.environ.get("MQ_PASS")
 MQ_HOST = os.environ.get("MQ_HOST")
 
-RUN_QUEUE = "bidapp.worker.run.queue"
-EXCHANGE_KILL = "bidapp.worker.kill"
-EXCHANGE_KILL_KEY = "bidapp.kill"
+RUN_QUEUE = os.environ.get("RUN_QUEUE")
+EXCHANGE_KILL = os.environ.get("EXCHANGE_KILL")
+EXCHANGE_KILL_KEY = os.environ.get("EXCHANGE_KILL_KEY")
 
 # BidAPP URL
 BIDAPP_URL = os.environ.get("BIDAPP_URL")

@@ -70,7 +70,7 @@ def publishJob(job):
         "workers": [1],
         "parameters": {
             "module_id"     : MODULE_ID_UPWORKBID,
-            "job": {
+            "bid": {
                 "id"            : job.id,
                 "url"           : job.feed.link,
                 "title"         : job.feed.title,
@@ -106,7 +106,7 @@ def job_detail_view(request, *args, **kwargs):
                     id__lt=job_id,
                     archived=False,
                     status__in=["created", "written"]
-                ).order_by('id').first()
+                ).order_by('-id').first()
                 needRedirect = True
             elif action == "next":
                 job = Job.objects.filter(
@@ -120,7 +120,7 @@ def job_detail_view(request, *args, **kwargs):
                 job = Job.objects.filter(
                     archived=False,
                     status__in=["created", "written"]
-                ).order_by('id').first()
+                ).order_by('-id').first()
 
         elif request.method == "POST":
             submitType = request.POST.get("submitType")
@@ -142,14 +142,14 @@ def job_detail_view(request, *args, **kwargs):
                 job = Job.objects.filter(
                     id__gt=job_id,
                     archived=False,
-                    status__in=["created", "written"]
+                    status__in=["created", "written", "failed"]
                 ).order_by('id').first()
                 needRedirect = True
                 if not job:
                     job = Job.objects.filter(
                         archived=False,
-                        status__in=["created", "written"]
-                    ).order_by('id').first()
+                        status__in=["created", "written", "failed"]
+                    ).order_by('-id').first()
 
         if not job:
             return redirect(reverse_lazy('job_list'))
