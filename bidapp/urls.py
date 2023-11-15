@@ -27,6 +27,7 @@ urlpatterns = [
     path('', feed_list_view, name='home'),
     path('admin/', admin.site.urls),
     path('parse-feed/', parse_rss_feed_view, name='parse_rss_feed'),
+    path('settings/', include('settings.urls')),
     path('worker/', include('workers.urls')),
     path('rssreader/', include('rssreader.urls')),
     path('view/', FeedEntryView.as_view(), name='view_feed_entry'),

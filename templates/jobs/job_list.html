@@ -65,10 +65,8 @@
               <th>Country</th>
               <th>Status</th>
               <th>Published</th>
-              <th
-                class="sorting_desc_disabled sorting_asc_disabled text-center"
-              >
-                Actions
+              <th class="sorting_desc_disabled sorting_asc_disabled text-center">
+                Archive
               </th>
             </tr>
           </thead>
@@ -153,7 +151,9 @@ function jobRefresh() {
           <td>${job.status}</td>
           <td>${job.published_date}</td>
           <td class="text-center">
-            <a href="/jobs/${job.id}/archive" class="btn btn-link btn-danger btn-icon btn-sm remove"><i class="tim-icons icon-simple-remove"></i></a>
+            <a href="/jobs/${job.id}/archive" class="btn btn-link btn-danger btn-icon btn-sm remove">
+              <i class="fa fa-archive"></i>
+            </a>
           </td>
         </tr>
       `;

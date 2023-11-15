@@ -13,14 +13,14 @@
             </a>
           </li>
           
+          {% else %}
+
           <li {% if view_name == "SETTINGS" %} class="active" {% endif %}>
             <a href="{% url 'settings' %}">
               <i class="tim-icons icon-settings"></i>
               <p>Settings</p>
             </a>
           </li>
-          
-          {% else %}
 
           <li {% if view_name == "WORKERS" %} class="active" {% endif %}>
             <a href="{% url 'worker_list' %}">

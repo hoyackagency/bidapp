@@ -11,19 +11,47 @@
 {% block content %}
 
 <div class="row">
-  <div class="col-md-12">
+  <div class="col-md-6">
     <div class="card">
       <div class="card-header">
         <h2 class="card-title">Settings</h4>
       </div>
 
       <div class="mx-4 mt-4">
-        <form method="post" novalidate>
+        <form id="settingsEditForm" method="post" class="form-horizontal" novalidate>
           {% csrf_token %} 
           
-          {% include 'includes/bs-form.html' with form=form %}
+          <div class="row mb-3">
+            <div class="col-sm-2"></div>
+            <label class="col-sm-6 col-form-label">Minimum Price for Fixed Jobs</label>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <input type="number" class="form-control" name="fixedMinPrice" value="{{ settings.fixedMinPrice }}">
+              </div>
+            </div>
+          </div>
 
-          <div class="card-footer">
+          <div class="row mb-3">
+            <div class="col-sm-2"></div>
+            <label class="col-sm-6 col-form-label">Minimum Rate for Hourly Jobs</label>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <input type="number" class="form-control" name="hourlyMinRate" value="{{ settings.hourlyMinRate }}">
+              </div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-sm-2"></div>
+            <label class="col-sm-6 col-form-label">Days that archive Feeds</label>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <input type="number" class="form-control" name="archiveDays" value="{{ settings.archiveDays }}">
+              </div>
+            </div>
+          </div>
+
+          <div class="card-footer text-center">
             <button type="submit" class="btn btn-fill btn-primary">Update</button>
           </div>
         </form>

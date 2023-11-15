@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_crontab',
     'widget_tweaks',
+    'settings',
     'workers',
     'rssreader',
     'feeds',

@@ -2,11 +2,12 @@ import feedparser
 import pytz
 import re
 import traceback
-from datetime import datetime
+from datetime import datetime, timezone
 from django.http import JsonResponse
 from django.utils.dateparse import parse_datetime
 from rest_framework import viewsets
 
+from settings.models import Settings
 from .models import FeedEntry, RSSFeed
 from .serializers import FeedEntrySerializer, RSSFeedSerializer
 from .utils import clean_text, parse_content
@@ -36,6 +37,8 @@ def parse_rss_feed_view(request):
 def parse_rss_feed():
     created_count = 0
     skipped_count = 0
+
+    mySettings = Settings.objects.first()
 
     rss_feeds = RSSFeed.objects.all()
     for rss_feed in rss_feeds:
@@ -94,6 +97,9 @@ def parse_rss_feed():
                         feed=rss_feed
                     )
                     feed_entry.save()
+                    
+                    __checkArchive(feed_entry, mySettings)
+
                     created_count += 1
                 except Exception as e:
                     print(f"Error parsing entry: {entry.title}")
@@ -103,3 +109,51 @@ def parse_rss_feed():
     message = f"RSS feed parsing completed successfully. Created: {created_count}, Skipped: {skipped_count}"
     return {'message': message}
 
+
+def __getPrice(pay_range):
+    price = None
+    value = pay_range.replace('$', '')
+    try:
+        if '-' in value:
+            ratings = value.split('-')
+            for rating in ratings:
+                rating = int(float(rating))
+                if not price:
+                    price = rating
+                else:
+                    if rating > price:
+                        price = rating
+        else:
+            price = int(value)
+    except:
+        pass
+    
+    return price
+
+
+def __checkArchive(feed, settings):
+    try:
+        if feed.job_type == "Fixed":
+            if settings.fixedMinPrice > 0:
+                price = __getPrice(feed.pay_range)
+                if price and price < settings.fixedMinPrice:
+                    feed.archived = True
+                    feed.save()
+                    return
+
+        elif feed.job_type == "Hourly":
+            if settings.hourlyMinRate > 0:
+                price = __getPrice(feed.pay_range)
+                if price and price < settings.hourlyMinRate:
+                    feed.archived = True
+                    feed.save()
+                    return
+
+        if settings.archiveDays > 0:
+            dtDiff = datetime.now(timezone.utc) - feed.published_date
+            if dtDiff.days >= settings.archiveDays:
+                feed.archived = True
+                feed.save()
+                return
+    except Exception as e:
+        return
