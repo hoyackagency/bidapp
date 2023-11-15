@@ -8,6 +8,9 @@ class Job(models.Model):
     proposal = models.TextField(default='')
     question = models.TextField(default='')
     answers = models.JSONField(null=True, blank=True)
+    useSummary = models.BooleanField(default=True)
+    useProposal = models.BooleanField(default=True)
+    useQuestion = models.BooleanField(default=True)
     status = models.CharField(
         max_length=10, 
         choices=[

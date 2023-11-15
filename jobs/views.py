@@ -75,9 +75,9 @@ def publishJob(job):
                 "url"           : job.feed.link,
                 "title"         : job.feed.title,
                 "hourly"        : True if job.feed.job_type == "Hourly" else False,
-                "summary"       : job.summary,
-                "proposal"      : job.proposal,
-                "question"      : job.question,
+                "summary"       : job.summary if job.useSummary else None,
+                "proposal"      : job.proposal if job.useProposal else None,
+                "question"      : job.question if job.useQuestion else None,
                 "command_at"    : command_at
             }
         }
@@ -127,13 +127,22 @@ def job_detail_view(request, *args, **kwargs):
             summary = request.POST.get("summary")
             proposal = request.POST.get("proposal")
             question = request.POST.get("question")
+            useSummary = True if request.POST.get("useSummary") == 'on' else False
+            useProposal = True if request.POST.get("useProposal") == 'on' else False
+            useQuestion = True if request.POST.get("useQuestion") == 'on' else False
 
             job.summary = summary
             job.proposal = proposal
             job.question = question
+            job.useSummary = useSummary
+            job.useProposal = useProposal
+            job.useQuestion = useQuestion
             job.save()
 
             if submitType == "Post":
+                if not useSummary and not useProposal and not useQuestion:
+                    return render(request, "jobs/job_detail.html", {"job": job, "errorMsg": "Select at least a field to post"})
+                
                 publishJob(job)
 
                 job.status = "pending"
@@ -157,7 +166,7 @@ def job_detail_view(request, *args, **kwargs):
             if needRedirect:
                 return redirect(reverse_lazy('job_detail', kwargs={'job_id': job.id}))
             else:
-                return render(request, "jobs/job_detail.html", {"job": job})
+                return render(request, "jobs/job_detail.html", {"job": job, "errorMsg": ""})
     except FeedEntry.DoesNotExist:
         return redirect(reverse_lazy('job_list'))
 
