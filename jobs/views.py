@@ -58,6 +58,17 @@ def job_list_view(request):
     return render(request, "jobs/job_list.html", context) 
 
 
+def job_archived_list_view(request):
+    jobs = Job.objects.filter(archived=True).order_by('id')
+
+    context = {}
+    context["is_staff"] = False
+    context["view_name"] = "JOBS"
+    context["jobs"] = jobs
+        
+    return render(request, "jobs/job_archived_list.html", context) 
+
+
 def publishJob(job):
     if settings.DEBUG:
         print(f"Job publish commands : {job.feed.title}")

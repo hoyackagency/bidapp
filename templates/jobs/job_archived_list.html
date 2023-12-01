@@ -1,0 +1,93 @@
+{% extends "layouts/base.html" %} {% block title %} Archived Jobs {% endblock title %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+<style></style>
+
+{% endblock stylesheets %} {% block content %}
+
+<div class="row">
+  <div class="col-12">
+    <div class="card card-chart px-4">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-sm-6 text-left">
+            <h2 class="card-title">Archived Jobs</h2>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="toolbar">
+          <div class="row">
+            <ol class="breadcrumb bg-transparent ml-3">
+              <li class="breadcrumb-item">
+                <a href="/jobs/">Jobs</a>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-chart px-4">
+      <div class="card-header mb-4">
+        <div class="row">
+          <div class="col-sm-6 text-left">
+            <h3 class="card-title">Archived Jobs</h3>
+          </div>
+          <div class="col-sm-3">
+            <!-- Show archived jobs -->
+          </div>
+        </div>
+      </div>
+      <div class="card-body min-vh-60">
+        <table id="jobs-table" class="table table-striped">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Title</th>
+              <th>Pay Range</th>
+              <th>Job Type</th>
+              <th>Category</th>
+              <th>Country</th>
+              <th>Status</th>
+              <th>Published</th>
+            </tr>
+          </thead>
+          <tbody id="jobs-data-content">
+            {% for job in jobs %}
+            <tr>
+              <td>{{ job.id }}</td>
+              <td>
+                <a href="{{ job.feed.link }}" target="_blank">{{ job.feed.title }}</a>
+              </td>
+              <td>{{ job.feed.pay_range }}</td>
+              <td>{{ job.feed.job_type }}</td>
+              <td>{{ job.feed.category }}</td>
+              <td>{{ job.feed.country }}</td>
+              <td>{{ job.status }}</td>
+              <td>{{ job.feed.published_date | date:'Y-m-d H:i:s A' }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<script>
+
+  $(document).ready(function () {
+    var jobs_table = $('#jobs-table').DataTable();
+  });
+
+</script>
+
+{% endblock javascripts %}

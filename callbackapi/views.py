@@ -21,6 +21,7 @@ ERR_STOPPED                 = 440
 ERR_BANNED                  = 441
 ERR_SIGN_IN                 = 442
 ERR_JOB_POST                = 443
+ERR_JOB_NOT_AVAILABLE       = 444
 ERR_UNKNOWN                 = 449
 
 
@@ -88,9 +89,12 @@ def bid_result_callback(request, *args, **kwargs):
             job = Job.objects.get(id=job_id)
             if result['error']:
                 job.status = "failed"
+                if result['code'] == ERR_JOB_NOT_AVAILABLE:
+                    job.archived = True
                 job.save()
             else:
                 job.status = "posted"
+                job.archived = True
                 job.save()
             return JsonResponse({
                 "error": False,
