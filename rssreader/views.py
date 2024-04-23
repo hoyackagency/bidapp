@@ -38,7 +38,7 @@ def parse_rss_feed():
     created_count = 0
     skipped_count = 0
 
-    mySettings = Settings.objects.first()
+    appSettings = Settings.objects.first()
 
     rss_feeds = RSSFeed.objects.all()
     for rss_feed in rss_feeds:
@@ -98,7 +98,7 @@ def parse_rss_feed():
                     )
                     feed_entry.save()
                     
-                    __checkArchive(feed_entry, mySettings)
+                    __checkArchive(feed_entry, appSettings)
 
                     created_count += 1
                 except Exception as e:
@@ -131,27 +131,27 @@ def __getPrice(pay_range):
     return price
 
 
-def __checkArchive(feed, settings):
+def __checkArchive(feed, appSettings):
     try:
         if feed.job_type == "Fixed":
-            if settings.fixedMinPrice > 0:
+            if appSettings.fixedMinPrice > 0:
                 price = __getPrice(feed.pay_range)
-                if price and price < settings.fixedMinPrice:
+                if price and price < appSettings.fixedMinPrice:
                     feed.archived = True
                     feed.save()
                     return
 
         elif feed.job_type == "Hourly":
-            if settings.hourlyMinRate > 0:
+            if appSettings.hourlyMinRate > 0:
                 price = __getPrice(feed.pay_range)
-                if price and price < settings.hourlyMinRate:
+                if price and price < appSettings.hourlyMinRate:
                     feed.archived = True
                     feed.save()
                     return
 
-        if settings.archiveDays > 0:
+        if appSettings.archiveDays > 0:
             dtDiff = datetime.now(timezone.utc) - feed.published_date
-            if dtDiff.days >= settings.archiveDays:
+            if dtDiff.days >= appSettings.archiveDays:
                 feed.archived = True
                 feed.save()
                 return

@@ -16,3 +16,8 @@ class Settings(models.Model):
     archiveDays = models.IntegerField(
         default=0
     )
+
+    # connects (read only)
+    connects = models.IntegerField(
+        default=0
+    )

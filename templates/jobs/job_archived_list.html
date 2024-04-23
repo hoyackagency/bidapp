@@ -85,7 +85,9 @@
 <script>
 
   $(document).ready(function () {
-    var jobs_table = $('#jobs-table').DataTable();
+    var jobs_table = $('#jobs-table').DataTable({
+      order: [[0, 'desc']]
+    });
   });
 
 </script>

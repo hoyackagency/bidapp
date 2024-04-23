@@ -28,19 +28,19 @@ def __getPrice(pay_range):
   
 def settings(request):
     if Settings.objects.count() == 0:
-        settings = Settings.objects.create()
-        settings.save()
+        appSettings = Settings.objects.create()
+        appSettings.save()
         
-    settings = Settings.objects.first()        
+    appSettings = Settings.objects.first()        
     
     if request.method == 'POST':
         fixedMinPrice = request.POST.get("fixedMinPrice")
         hourlyMinRate = request.POST.get("hourlyMinRate")
         archiveDays = request.POST.get("archiveDays")
-        settings.fixedMinPrice = int(fixedMinPrice)
-        settings.hourlyMinRate = int(hourlyMinRate)
-        settings.archiveDays = int(archiveDays)
-        settings.save()
+        appSettings.fixedMinPrice = int(fixedMinPrice)
+        appSettings.hourlyMinRate = int(hourlyMinRate)
+        appSettings.archiveDays = int(archiveDays)
+        appSettings.save()
 
         now = datetime.now(timezone.utc)
         feeds = FeedEntry.objects.filter(archived=False).order_by('-id')

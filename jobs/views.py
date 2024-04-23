@@ -59,7 +59,7 @@ def job_list_view(request):
 
 
 def job_archived_list_view(request):
-    jobs = Job.objects.filter(archived=True).order_by('id')
+    jobs = Job.objects.filter(archived=True).order_by('-id')
 
     context = {}
     context["is_staff"] = False
@@ -72,6 +72,16 @@ def job_archived_list_view(request):
 def publishJob(job):
     if settings.DEBUG:
         print(f"Job publish commands : {job.feed.title}")
+
+    price = None
+    if job.feed.job_type != "Hourly":
+        try:
+            price = int(job.feed.pay_range)
+        except:
+            pass
+        if not price:
+            print ("Invalid Job, the fixed job hasn't price")
+            return
 
     # post the run to the message queue api
     rabbitmqPublisher = RabbitMQPublisher()
@@ -86,6 +96,7 @@ def publishJob(job):
                 "url"           : job.feed.link,
                 "title"         : job.feed.title,
                 "hourly"        : True if job.feed.job_type == "Hourly" else False,
+                "price"         : price,
                 "summary"       : job.summary if job.useSummary else None,
                 "proposal"      : job.proposal if job.useProposal else None,
                 "question"      : job.question if job.useQuestion else None,
@@ -116,21 +127,21 @@ def job_detail_view(request, *args, **kwargs):
                 job = Job.objects.filter(
                     id__lt=job_id,
                     archived=False,
-                    status__in=["created", "written"]
+                    status__in=["created", "written", "failed"]
                 ).order_by('-id').first()
                 needRedirect = True
             elif action == "next":
                 job = Job.objects.filter(
                     id__gt=job_id,
                     archived=False,
-                    status__in=["created", "written"]
+                    status__in=["created", "written", "failed"]
                 ).order_by('id').first()
                 needRedirect = True
 
             if not job:
                 job = Job.objects.filter(
                     archived=False,
-                    status__in=["created", "written"]
+                    status__in=["created", "written", "failed"]
                 ).order_by('-id').first()
 
         elif request.method == "POST":

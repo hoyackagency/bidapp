@@ -226,7 +226,7 @@
     }
 
     var jobStatus = document.getElementById("job-status").value;
-    var disableControls = jobStatus !== "written";
+    var disableControls = jobStatus !== "written" && jobStatus !== "failed";
 
     document.getElementById("job-summary").readOnly = disableControls;
     document.getElementById("job-proposal").readOnly = disableControls;

@@ -5,6 +5,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from jobs.models import Job
+from settings.models import Settings
 from workers.models import Worker
 
 
@@ -14,6 +15,7 @@ HOST_STATUS_IDLE            = 201
 
 # data error code
 SUCCESS                     = 200
+SUCCESS_CONNECTS            = 201
 ERR_BAD_REQUEST             = 400
 ERR_NOT_FOUND               = 404
 ERR_NET_TIMEOUT             = 408
@@ -22,6 +24,8 @@ ERR_BANNED                  = 441
 ERR_SIGN_IN                 = 442
 ERR_JOB_POST                = 443
 ERR_JOB_NOT_AVAILABLE       = 444
+ERR_GET_CONNECTS            = 445
+ERR_NEED_CONNECTS           = 446
 ERR_UNKNOWN                 = 449
 
 
@@ -93,9 +97,15 @@ def bid_result_callback(request, *args, **kwargs):
                     job.archived = True
                 job.save()
             else:
-                job.status = "posted"
-                job.archived = True
-                job.save()
+                if result['code'] == SUCCESS:
+                    job.status = "posted"
+                    job.archived = True
+                    job.save()
+                elif result['code'] == SUCCESS_CONNECTS:
+                    appSettings = Settings.objects.first()
+                    appSettings.connects = result['data']['connects']
+                    appSettings.save()
+
             return JsonResponse({
                 "error": False,
                 "message": f"Job result callback success : {job_id}"
