@@ -82,7 +82,7 @@ def parse_rss_feed():
                         skipped_count += 1
                         continue
 
-                    job_title, pay_range, job_type, category, skills, country = parse_content(original_content)
+                    pay_range, job_type, category, skills, country = parse_content(original_content)
 
                     feed_entry = FeedEntry.objects.create(
                         title=title,

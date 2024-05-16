@@ -35,6 +35,8 @@ ALLOWED_HOSTS = [
     '127.0.0.1', 
     '192.168.122.54',
     '0.0.0.0',
+    '10.0.2.2',
+    '192.168.0.145',
     os.environ.get("SERVER")
 ]
 
@@ -58,6 +60,7 @@ INSTALLED_APPS = [
     'webapp',
     'scheduler',
     'callbackapi',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -68,7 +71,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True #For development only, restrict this in production
 
 ROOT_URLCONF = 'bidapp.urls'
 TEMPLATE_DIR = os.path.join(BASE_DIR, "templates")  # ROOT dir for templates

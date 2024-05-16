@@ -89,6 +89,8 @@ def bid_result_callback(request, *args, **kwargs):
         module_id = result['data']['module_id']
         job_id = result['data']['id']
 
+        print (f"===>>> bid result : {result}")
+
         if module_id == settings.MODULE_ID_UPWORKBID:
             job = Job.objects.get(id=job_id)
             if result['error']:

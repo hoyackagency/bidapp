@@ -1,0 +1,27 @@
+@hostname = 127.0.0.1
+@port = 8000
+@host = {{hostname}}:{{port}}
+@api_key = fcd9c3f9c2554b039ce58343f78c1915
+
+
+### parse feed
+@name = parse-feed
+
+GET http://{{host}}//{{name}}/ HTTP/1.1
+
+
+### parse feed
+@name = rssreader/parse
+
+GET http://{{host}}//{{name}}/ HTTP/1.1
+
+
+### post request
+
+POST http://{{host}}/api/ HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "",
+    "domain": ""
+}

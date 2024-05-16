@@ -16,11 +16,6 @@ def clean_text(text):
     return cleaned_text
 
 def parse_content(content):
-    # Extract the description
-    description_pattern = r'(.*?)(?=<b>(Hourly Range|Budget|Posted On))'
-    description_match = re.search(description_pattern, content)
-    description = description_match.group(1) if description_match else None
-
     # Check for Hourly Range, Budget, or neither
     if 'Hourly Range' in content:
         range_pattern = r'Hourly Range</b>: (.*?)\n'
@@ -45,6 +40,8 @@ def parse_content(content):
     skills_pattern = r'Skills</b>:(.*?)\n'
     skills_match = re.search(skills_pattern, content)
     skills = skills_match.group(1) if skills_match else None
+    if skills:
+        skills = re.sub(r'\s\s+', ' ', skills)
 
     # Extract the Country
     country_pattern = r'Country</b>: (.*?)\n'
@@ -52,8 +49,6 @@ def parse_content(content):
     country = country_match.group(1) if country_match else None
 
     # Clean the extracted values
-    if description:
-        description = clean_text(description)
     if pay_range:
         pay_range = clean_text(pay_range)
     if category:
@@ -63,4 +58,4 @@ def parse_content(content):
     if country:
         country = clean_text(country)
 
-    return description, pay_range, job_type, category, skills, country
+    return pay_range, job_type, category, skills, country

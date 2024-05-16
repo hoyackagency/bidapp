@@ -1,15 +1,15 @@
 from django.db import models
 
 class FeedEntry(models.Model):
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=1000)
     link = models.URLField()
     published_date = models.DateTimeField()
     content = models.TextField()
-    pay_range = models.CharField(max_length=100, null=True, blank=True)
-    job_type = models.CharField(max_length=100, null=True, blank=True)
-    category = models.CharField(max_length=100, null=True, blank=True)
-    skills = models.CharField(max_length=100, null=True, blank=True)
-    country = models.CharField(max_length=100, null=True, blank=True)
+    pay_range = models.CharField(max_length=255, null=True, blank=True)
+    job_type = models.CharField(max_length=255, null=True, blank=True)
+    category = models.CharField(max_length=255, null=True, blank=True)
+    skills = models.CharField(max_length=1000, null=True, blank=True)
+    country = models.CharField(max_length=255, null=True, blank=True)
     feed = models.ForeignKey('RSSFeed', on_delete=models.CASCADE)
     archived = models.BooleanField(default=False)
 
