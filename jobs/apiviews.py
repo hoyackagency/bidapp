@@ -70,7 +70,6 @@ def create_or_update_job(feed_entry_id, job_status):
             return {'error': 'Job already exists for the given feed_entry.'}, 400
         except Job.DoesNotExist:
             job = Job.objects.create(feed_entry=feed_entry, status=job_status)
-            Bid.objects.create(job=job)
             return {'message': 'Job created successfully.'}, 200
     else:
         return {'message': f'Unknown job status : {job_status}'}, 400

@@ -22,7 +22,6 @@ def __make_bid_from_chatgpt(question):
         result = response.json()
         summary = result["Summary"]
         proposal = result["Proposal"]
-        proposal = proposal[11:]
         questions = result["Questions"]
         return summary, proposal, questions
     else:
